@@ -1,6 +1,6 @@
 # Shopify Backend Challenge
 
-> Demo at TODO: ADD
+> Demo at https://shopify-backend-fall.herokuapp.com/
 
 The following is an API that lets you post your favourite images to the cloud.
 
