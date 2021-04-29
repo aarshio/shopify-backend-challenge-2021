@@ -1,17 +1,21 @@
 const express = require("express");
-const cors = require("cors");
 const passport = require("passport");
-const passportLocal = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
-const bcrypt = require("bcryptjs");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-var multer = require("multer");
-var upload = multer({
-  dest: "./uploads/",
-});
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const multer = require("multer");
+var _ = require("lodash");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "./uploads"),
+  filename: (req, file, cb) =>
+    cb(null, new Date().toISOString() + file.originalname),
+});
+var upload = multer({
+  storage: storage,
+});
 
 dotenv.config();
 
@@ -22,7 +26,7 @@ const Post = require("./models/post");
 //ENV
 const PORT = process.env.PORT;
 const SECRET = process.env.SECRET;
-// const CORS_ORIGIN = process.env.CORS_ORIGIN; //client url
+const SERVER_URL = process.env.SERVER_URL;
 const URI = process.env.URI;
 
 const app = express();
@@ -32,11 +36,8 @@ mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Middleware
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-
-// for parsing multipart/form-data
-// app.use(upload.array());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
   session({
@@ -50,6 +51,9 @@ app.use(cookieParser(SECRET));
 app.use(passport.initialize());
 app.use(passport.session());
 require("./auth");
+
+// Make uploads public
+app.use("/uploads", express.static("uploads"));
 
 // Routes
 
@@ -75,7 +79,7 @@ app.post("/login", (req, res, next) => {
     else {
       req.logIn(user, (err) => {
         if (err) throw err;
-        res.send(req.user);
+        res.send(_.omit(req.user._doc, "password"));
       });
     }
   })(req, res, next);
@@ -92,15 +96,13 @@ app.post("/register", (req, res) => {
         password: req.body.password,
       });
       await newUser.save();
-      req.logIn(newUser, (err) => {
-        if (err) throw err;
-      });
+      res.send(_.omit(newUser._doc, "password"));
     }
   });
 });
 
 app.get("/auth", (req, res) => {
-  if (req.user) res.send(req.user);
+  if (req.user) res.send(_.omit(req.user._doc, "password"));
   else res.sendStatus(401);
 });
 
@@ -108,17 +110,17 @@ app.get("/auth", (req, res) => {
 
 app.post(
   "/add/image",
-  // isLoggedIn,
+  isLoggedIn,
   upload.single("contentImage"),
   (req, res) => {
-    console.log(req.file);
-    // const newPost = new Post({
-    //   user_id: req.body.user_id,
-    //   title: req.body.title,
-    //   content: req.body.content,
-    // });
-    // newPost.save();
-    // res.send(newPost);
+    const newPost = new Post({
+      user_id: req.body.user_id,
+      title: req.body.title,
+      contentImage: SERVER_URL + req.file.path,
+      private: req.body.private ? req.body.private : false,
+    });
+    newPost.save();
+    res.send(newPost);
   }
 );
 
