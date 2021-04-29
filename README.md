@@ -2,6 +2,8 @@
 
 > Demo at https://shopify-backend-fall.herokuapp.com/
 
+> Sample Image Upload https://shopify-backend-fall.herokuapp.com/uploads/2021-04-29T20:45:50.076Zcat.jpeg
+
 The following is an API that lets you post your favourite images to the cloud.
 
 # Requirements
