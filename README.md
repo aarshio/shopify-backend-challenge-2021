@@ -1,6 +1,8 @@
 # Shopify Backend Challenge
 
-> Demo at TODO: ADD
+> Demo at https://shopify-backend-fall.herokuapp.com/ (NOTE: that it will take some time to load the first time, since I'm using the free version of heroku)
+
+> Sample Image Upload https://shopify-backend-fall.herokuapp.com/uploads/2021-04-29T20:45:50.076Zcat.jpeg
 
 The following is an API that lets you post your favourite images to the cloud.
 
@@ -35,7 +37,7 @@ Sample `POST /register`
 ## Endpoints that require Authentication (must login first)
 
 
-* `POST /add/image` [Requires: user_id (string), title (string), contentImage] [Optional: private (boolean)]
+* `POST /add/image` [Requires: user_id (string), title (string), contentImage] [Optional: private (boolean)] -> Returns post (object)
 
 Sample `POST /add/image`
 ![alt text](https://i.imgur.com/3lpvKJ6.png "Title")
