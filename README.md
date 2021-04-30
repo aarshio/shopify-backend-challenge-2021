@@ -37,7 +37,7 @@ Sample `POST /register`
 ## Endpoints that require Authentication (must login first)
 
 
-* `POST /add/image` [Requires: user_id (string), title (string), contentImage] [Optional: private (boolean)]
+* `POST /add/image` [Requires: user_id (string), title (string), contentImage] [Optional: private (boolean)] -> Returns post (object)
 
 Sample `POST /add/image`
 ![alt text](https://i.imgur.com/3lpvKJ6.png "Title")
