@@ -1,6 +1,6 @@
 # Shopify Backend Challenge
 
-> Demo at https://shopify-backend-fall.herokuapp.com/
+> Demo at https://shopify-backend-fall.herokuapp.com/ (note that it will take some time to load the first time, since I'm using the free version of heroku)
 
 > Sample Image Upload https://shopify-backend-fall.herokuapp.com/uploads/2021-04-29T20:45:50.076Zcat.jpeg
 
